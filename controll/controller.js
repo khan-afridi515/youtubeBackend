@@ -110,12 +110,31 @@ const oauth2Client = new google.auth.OAuth2(
         return res.status(404).json({ error: "Channel not authorized" });
       }
   
-      oauth2Client.setCredentials({
-        access_token: token.access_token,
-        refresh_token: token.refresh_token
-      });
+      // oauth2Client.setCredentials({
+      //   access_token: token.access_token,
+      //   refresh_token: token.refresh_token
+      // });
   
-      await oauth2Client.getAccessToken();
+      // await oauth2Client.getAccessToken();
+
+
+      
+oauth2Client.setCredentials({
+  access_token: token.access_token,
+  refresh_token: token.refresh_token,
+  expiry_date: token.expiry_date
+});
+
+// Refresh access token if expired
+if (Date.now() >= token.expiry_date) {
+  const { credentials } = await oauth2Client.refreshAccessToken();
+  oauth2Client.setCredentials(credentials);
+
+  // Update token in DB
+  token.access_token = credentials.access_token;
+  token.expiry_date = credentials.expiry_date;
+  await token.save();
+}
   
       const youtube = google.youtube({ version: "v3", auth: oauth2Client });
   
