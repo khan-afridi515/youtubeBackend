@@ -12,11 +12,12 @@ dotenv.config();
 
 
 const oauth2Client = new google.auth.OAuth2(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
+    process.env.CLIENT_IDD,
+    process.env.CLIENT_SECRETT,
     process.env.REDIRECT_URI
   );
-  
+
+
   exports.connectYoutube = (req, res) => {
     const url = oauth2Client.generateAuthUrl({
       access_type: "offline",
