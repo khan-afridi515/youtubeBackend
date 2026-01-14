@@ -31,5 +31,11 @@ app.use(async (req, res, next) => {
 app.use('/api/youtube', youtubeRouter);
 
 
+app.listen(3000, ()=>{
+    connectDB();
+    console.log("Server is running on port 3000 http://localhost:3000/api/youtube/callback")
+})
+
+
 module.exports = app;
 module.exports.handler = serverless(app);
